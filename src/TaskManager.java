@@ -54,7 +54,7 @@ public class TaskManager {
         return new ArrayList<>(tasks.keySet());
     }
 
-    private void loadFromFile() {
+    public void loadFromFile() {
         File file = new File(filePath);
 
         // 1. If file does not exist yet, there is nothing to load
