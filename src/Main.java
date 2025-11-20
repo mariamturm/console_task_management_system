@@ -126,6 +126,16 @@ public class Main {
     }
 
     private static void handleListTasks(TaskManager taskManager){
+        List<Task> tasks = taskManager.getAllTasks();
+        if(tasks.isEmpty()){
+            System.out.println("No tasks available.");
+            return;
+        }
+
+        System.out.println("List of tasks: ");
+        for(Task task : tasks){
+            System.out.println(task.getName());
+        }
 
     }
 
