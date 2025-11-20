@@ -150,7 +150,7 @@ public class TaskManager {
 //        }
 //    }
 
-    private void saveToFile() {
+    public void saveToFile() {
         File file = new File(filePath);
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
