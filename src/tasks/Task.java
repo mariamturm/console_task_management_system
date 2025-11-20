@@ -1,5 +1,7 @@
 package tasks;
 
+import java.util.Scanner;
+
 public abstract class Task {
     private String name;
 
@@ -35,5 +37,7 @@ public abstract class Task {
 //    }
 
     public abstract String toFileString();
+
+    public abstract void updateExtraFields(Scanner scanner);
 
 }

@@ -1,5 +1,7 @@
 package tasks;
 
+import java.util.Scanner;
+
 public class BasicTask extends Task {
 
     private String type;
@@ -24,5 +26,10 @@ public class BasicTask extends Task {
         //type|name|definition|creatorUserName
         return getType() + "|" + getName() + "|" +getDefinition() + "|" +getCreatorUserName();
 
+    }
+
+    @Override
+    public void updateExtraFields(Scanner scanner) {
+        System.out.println("Basic task cannot be updated.");
     }
 }

@@ -1,5 +1,7 @@
 package tasks;
 
+import java.util.Scanner;
+
 public class RepeatableTask extends Task {
 
     private String type;
@@ -45,5 +47,18 @@ public class RepeatableTask extends Task {
         //type|name|definition|creatorUserName|howManyTimes|when
         return getType() + "|" + getName() + "|" +getDefinition() + "|" +getCreatorUserName() + "|" + howManyTimes + "|" + when;
 
+    }
+
+    @Override
+    public void updateExtraFields(Scanner scanner) {
+        System.out.println("Enter new timesToDo: ");
+        int newTimes = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Enter new when: ");
+        String newWhen = scanner.nextLine();
+
+        setHowManyTimes(newTimes);
+        setWhen(newWhen);
+        System.out.println("Task updated.");
     }
 }

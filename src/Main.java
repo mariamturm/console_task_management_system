@@ -141,6 +141,32 @@ public class Main {
     }
 
     private static void handleUpdateTask(Scanner scanner, TaskManager taskManager){
+        System.out.println("Enter task name to update: ");
+        String name = scanner.nextLine();
+
+        Task task = taskManager.getTask(name);
+        if(task == null){
+            System.out.println("Task not found.");
+            return;
+        }
+        System.out.println("What do you want to update? ");
+        System.out.println("1. Definition");
+        System.out.println("2. Type-specific field (deadline / times / when)");
+        int updateChoice = Integer.parseInt(scanner.nextLine());
+
+        if(updateChoice == 1){
+            System.out.println("Enter new definition: ");
+            String newDefinition = scanner.nextLine();
+            task.setDefinition(newDefinition);
+        }else if(updateChoice == 2){
+            task.updateExtraFields(scanner);
+        }else{
+            System.out.println("Invalid option.");
+            return;
+        }
+
+        taskManager.saveToFile();
+        System.out.println("Task updated successfully.");
 
     }
 
@@ -151,7 +177,7 @@ public class Main {
         boolean deleted = taskManager.deleteTask(name);
         if(!deleted){
             System.out.println("Could not delete task.");
-            return
+            return;
         }
 
         taskManager.saveToFile();

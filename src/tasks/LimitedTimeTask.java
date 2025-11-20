@@ -1,7 +1,9 @@
 package tasks;
 
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class LimitedTimeTask extends Task{
 
@@ -43,5 +45,19 @@ public class LimitedTimeTask extends Task{
     public String toFileString() {
         //Type|name|definition|creatorUserName|deadline
         return getType() + "|" + getName() + "|" +getDefinition() + "|" +getCreatorUserName() + "|" + deadline;
+    }
+
+    @Override
+    public void updateExtraFields(Scanner scanner) {
+        System.out.println("Enter new deadline (dd/MM/yyyy HH:mm): ");
+        String deadlineText = scanner.nextLine();
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            LocalDateTime newDeadline = LocalDateTime.parse(deadlineText, formatter);
+            setDeadline(newDeadline);
+            System.out.println("Deadline updated.");
+        }catch(Exception e){
+            System.out.println("Invalid date format.");
+        }
     }
 }
