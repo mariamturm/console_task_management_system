@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import tasks.*;
@@ -144,6 +145,17 @@ public class Main {
     }
 
     private static void handleDeleteTask(Scanner scanner, TaskManager taskManager){
+        System.out.println("Enter Task name to delete: ");
+        String name = scanner.nextLine();
+
+        boolean deleted = taskManager.deleteTask(name);
+        if(!deleted){
+            System.out.println("Could not delete task.");
+            return
+        }
+
+        taskManager.saveToFile();
+        System.out.println("Task deleted successfully.");
 
     }
 
