@@ -5,11 +5,18 @@ import java.time.format.DateTimeFormatter;
 
 public class LimitedTimeTask extends Task{
 
+    private String type;
+
     private LocalDateTime deadline;
 
     public LimitedTimeTask(String name, String definition, String creatorUserName, LocalDateTime deadline){
         super(name, definition, creatorUserName);
         this.deadline = deadline;
+        this.type = "Limited";
+    }
+
+    public String getType() {
+        return type;
     }
 
     public LocalDateTime getDeadline(){
@@ -22,9 +29,19 @@ public class LimitedTimeTask extends Task{
 
     @Override
     public String getDetails() {
-        deadline.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-        return getName() + ", " + getDefinition() + ", " + getCreatorUserName() + ", " + deadline;
-//        super.getDetails();
-//        return deadline.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String formattedDeadline = deadline.format(formatter);
+
+        return getName() + ", "
+                + getDefinition() + ", "
+                + getCreatorUserName() + ", "
+                + formattedDeadline;
+    }
+
+
+    @Override
+    public String toFileString() {
+        //Type|name|definition|creatorUserName|deadline
+        return getType() + "|" + getName() + "|" +getDefinition() + "|" +getCreatorUserName() + "|" + deadline;
     }
 }

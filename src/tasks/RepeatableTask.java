@@ -1,6 +1,9 @@
 package tasks;
 
 public class RepeatableTask extends Task {
+
+    private String type;
+
     private int howManyTimes;
 
     private String when;
@@ -9,6 +12,11 @@ public class RepeatableTask extends Task {
         super(name, definition, creatorUserName);
         this.howManyTimes = howManyTimes;
         this.when = when;
+        this.type = "Repeatable";
+    }
+
+    public String getType() {
+        return type;
     }
 
     public int getHowManyTimes(){
@@ -30,5 +38,12 @@ public class RepeatableTask extends Task {
     @Override
     public String getDetails() {
         return getName() + ", " + getDefinition() + ", " + getCreatorUserName() + ", " + howManyTimes + ", " + when;
+    }
+
+    @Override
+    public String toFileString() {
+        //type|name|definition|creatorUserName|howManyTimes|when
+        return getType() + "|" + getName() + "|" +getDefinition() + "|" +getCreatorUserName() + "|" + howManyTimes + "|" + when;
+
     }
 }

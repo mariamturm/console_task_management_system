@@ -1,6 +1,6 @@
 package tasks;
 
-abstract class Task {
+public abstract class Task {
     private String name;
 
     private String definition;
@@ -33,5 +33,7 @@ abstract class Task {
 //    {
 //        return getName() + ", " + getDefinition() + ", " + getCreatorUserName();
 //    }
+
+    public abstract String toFileString();
 
 }
