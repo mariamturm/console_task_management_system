@@ -1,92 +1,94 @@
 import tasks.*;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.io.*;
-import java.nio.*;
-
 
 public class TaskManager {
 
-    //Map<String, Task> tasks = new HashMap<>();
+    // Stores all tasks using task name as key (name must be unique)
     private Map<String, Task> tasks;
 
+    // Location of the file used to save/load tasks
     private String filePath;
 
     public TaskManager() {
+        // Initialize HashMap and set the file path
         this.tasks = new HashMap<>();
         this.filePath = "tasks.txt";
-        //loadFromFile();
+        // loadFromFile();   // loading happens manually in Main
     }
 
+    // Add a new task to the map
     public boolean addTask(Task task){
+        // If a task with this name already exists → fail
         if(tasks.containsKey(task.getName())){
             return false;
         }else{
+            // Otherwise add it
             tasks.put(task.getName(), task);
-            //saveToFile();
             return true;
         }
-
     }
 
+    // Return a task by name (or null if not found)
     public Task getTask(String name){
         return tasks.get(name);
-        //will return null if it does not exist
     }
 
+    // Return all tasks as a List
     public List<Task> getAllTasks(){
         return new ArrayList<>(tasks.values());
     }
 
+    // Delete a task by name
     public boolean deleteTask(String name){
         if(tasks.containsKey(name)){
             tasks.remove(name);
-            //saveToFile();
             return true;
         }else{
             return false;
         }
     }
 
+    // Return a list of all task names
     public List<String> getTaskNames(){
         return new ArrayList<>(tasks.keySet());
     }
 
+    // Load tasks from file (tasks.txt)
     public void loadFromFile() {
         File file = new File(filePath);
 
-        // 1. If file does not exist yet, there is nothing to load
+        // 1. If file does not exist, nothing to load
         if (!file.exists()) {
             return;
         }
 
-        // 2. Clear current tasks so we don't duplicate if loadFromFile() is called again
+        // 2. Clear current tasks to avoid duplicating entries
         tasks.clear();
 
-        // 3. Formatter for parsing deadline strings (must match what you use in saveToFile)
+        // 3. Formatter for parsing LocalDateTime in file
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-        // Example stored deadline: 2025-01-22T18:00
+        // Example expected deadline string format: 2025-01-22T18:00
 
         try (Scanner myReader = new Scanner(file)) {
 
-            // 4. Read file line by line
+            // 4. Read file line-by-line
             while (myReader.hasNextLine()) {
                 String line = myReader.nextLine().trim();
 
-                // skip empty lines
+                // Skip completely empty lines
                 if (line.isEmpty()) {
                     continue;
                 }
 
-                // 5. Split the line into parts by "|"
+                // 5. Split by "|" separator
                 String[] parts = line.split("\\|");
 
-                // We expect at least TYPE, name, definition, creator
+                // Must have at least type, name, definition, creator
                 if (parts.length < 4) {
-                    // malformed line, skip it
-                    continue;
+                    continue; // malformed line → skip
                 }
 
                 String type = parts[0];
@@ -94,16 +96,18 @@ public class TaskManager {
                 String definition = parts[2];
                 String creatorUserName = parts[3];
 
+                // Will store the created Task object
                 Task task = null;
 
-                // 6. Decide which subclass to create based on TYPE
+                // 6. Decide task type and rebuild the object
                 switch (type) {
                     case "BASIC":
+                        // BasicTask has no extra fields
                         task = new BasicTask(name, definition, creatorUserName);
                         break;
 
                     case "LIMITED":
-                        // parts[4] should contain the deadline string, if it contains then it is repeatable
+                        // Must have a valid deadline in parts[4]
                         if (parts.length >= 5 && !parts[4].isEmpty()) {
                             LocalDateTime deadline = LocalDateTime.parse(parts[4], formatter);
                             task = new LimitedTimeTask(name, definition, creatorUserName, deadline);
@@ -120,48 +124,37 @@ public class TaskManager {
                         break;
 
                     default:
-                        // unknown type, skip
+                        // Unknown task type → skip
                         break;
                 }
 
-                // 7. If we successfully created a task, put it in the map
+                // 7. If task was correctly reconstructed, save it to the map
                 if (task != null) {
                     tasks.put(name, task);
                 }
             }
 
         } catch (FileNotFoundException e) {
-            // Shouldn't happen because we checked exists(), but just in case
+            // Should not happen because we checked file.exists(), but kept as safety
             e.printStackTrace();
         }
     }
 
-//    private void saveToFile(){
-//        try {
-//            File file = new File(filePath);
-//            if(file.createNewFile()){
-//               for (Task task : tasks.values()){
-//                   task.toFileString();
-//               }
-//
-//            }else{
-//
-//            }
-//        }
-//    }
-
+    // Save all tasks to file by writing each task's toFileString() result
     public void saveToFile() {
         File file = new File(filePath);
 
+        // Use PrintWriter + FileWriter to write lines into tasks.txt
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            // loop through all tasks and write each as a line
+
+            // For each task, write a single line using its toFileString() method
             for (Task task : tasks.values()) {
                 writer.println(task.toFileString());
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
 }

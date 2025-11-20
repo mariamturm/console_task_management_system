@@ -32,9 +32,6 @@ public abstract class Task {
     }
 
     public abstract String getDetails();
-//    {
-//        return getName() + ", " + getDefinition() + ", " + getCreatorUserName();
-//    }
 
     public abstract String toFileString();
 
