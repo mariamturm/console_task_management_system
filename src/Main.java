@@ -148,6 +148,17 @@ public class Main {
     }
 
     private static void handleViewTask(Scanner scanner, TaskManager taskManager){
+        System.out.println("Enter task name to view: ");
+        String name = scanner.nextLine();
+
+        Task task = taskManager.getTask(name);
+        if(task == null){
+            System.out.println("Task not found.");
+            return;
+        }
+
+        System.out.println("Task details: ");
+        System.out.println(task.getDetails());
 
     }
 }
